@@ -9,7 +9,7 @@ Elegant solution to sign transactions from light clients
 - IoT (Arduino, Raspberry, e.t.c) :slot_machine:
 - Browsers (no plugins required like MetaMask :cat:)
 
-This solution allow user to store it's private key locally as encrypted QR code (other image visualization). When it's needed to sign transaction user must open Web View mode (or any other app with JS engine inside) and decrypt it's QR code. After that sended transaction will be signed and sent automatically. :zap:
+This solution allow user to store it's private key locally as encrypted QR code (other image visualization). When it's needed to sign transaction user must open Web View mode (or any other app with JS engine inside) and decrypt it's QR code. After that transaction will be signed and sent automatically. :zap:
 
 You don't have to fill write any code sign transaction. Just call `.sign()` method in relevant class, run the script, relax and take a cup of :coffee: while next block is mining! :tada:
 
@@ -29,4 +29,4 @@ We have collected notes on how to contribute to this project in [CONTRIBUTING.md
 
 ## License
 
-Github Changelog Generator is released under the [MIT License](http://www.opensource.org/licenses/MIT).
+lighty-sig is released under the [MIT License](http://www.opensource.org/licenses/MIT).
