@@ -1,3 +1,7 @@
+const tbn = (x) => new BigNumber(x);
+const tw = (x) => BigNumber.isBigNumber(x) ? x.times(1e8).toFixed(0) : tbn(x).times(1e8).toFixed(0);
+const fw = (x) => BigNumber.isBigNumber(x) ? x.times(1e-8).toFixed(0) : tbn(x).times(1e-8).toFixed(0);
+
 /* ----CONFIG BLOCK START---- */
 const CURRENT_NETWORK = WavesAPI.MAINNET_CONFIG;
 
@@ -293,7 +297,6 @@ var exchange = {
         }
     }
 }
-
 /* ----CONFIG BLOCK END---- */
 
 
@@ -512,9 +515,8 @@ const DEX = {
         for (let i in orderBook[dependency]) {
             const price = orderBook[dependency][i].price;
             let _amount = amount;
-            if (type === 'sell') {
-                _amount = (amount / price * Math.pow(10, 8)).toFixed(0);
-            }
+            if (type === 'sell')
+                _amount = tw(tbn(amount).div(price)).toNumber();
             if (orderBook[dependency][i].amount >= _amount) {
                 priceIndex = i;
                 amount = _amount;
@@ -603,6 +605,19 @@ const Course = {
         });
 
         return response;
+    },
+    /**
+     * Allows to convert currencies
+     * @param from Currency that will be changed
+     * @param to Destination currency
+     * @param value Amount of currency that will be changed
+     * @returns {Promise<number>}
+     */
+    convert: async (from, to, value) => {
+        const courses = await Course.getCourse(currency[from].ticker);
+        const rate = courses[currency[to].ticker];
+        const result = value * rate;
+        return result * 1000 % 10 === 0 ? result : result.toFixed(2);
     }
 }
 /* ----COURSE BLOCK END---- */
