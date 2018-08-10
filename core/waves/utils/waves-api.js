@@ -74243,7 +74243,7 @@
             var fetch = request_1.createFetchWrapper(1 /* MATCHER */, 0 /* V1 */, request_1.processJSON);
             exports.default = {
                 getMatcherKey: function () {
-                    return fetch('/');
+                    return fetch('/matcher');
                 }
             };
 
@@ -74336,7 +74336,7 @@
                     });
                 },
                 createOrder: request_1.wrapTxRequest(waves_signature_generator_1.CREATE_ORDER_SIGNATURE, preCreateOrderAsync, postCreateOrder, function (postParams) {
-                    return fetch('/orderbook', postParams);
+                    return fetch('/matcher/orderbook', postParams);
                 }),
                 cancelOrder: generateCancelLikeRequest('cancel'),
                 deleteOrder: generateCancelLikeRequest('delete')

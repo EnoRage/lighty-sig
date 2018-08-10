@@ -9,6 +9,7 @@ const TESTNET_CONFIG = {
 };
 
 var assets = {
+    'Waves': 'WAVES',
     'Bitcoin': '8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS',
     'BitcoinCash': 'zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy',
     'Ethereum': '474jTeYx2r2Va35794tCScAXWJG9hU2HcgxzMowaZUnu',
@@ -19,6 +20,280 @@ var assets = {
     'US_Dollar': 'Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck',
     'Euro': 'Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU'
 }
+
+var currency = {
+    "Bitcoin": {
+        course: 'btc-rub',
+        name: "Bitcoin",
+        ticker: "BTC",
+        assetID: assets.Bitcoin
+    },
+    "Ethereum": {
+        course: 'eth-rub',
+        name: "Ethereum",
+        ticker: "ETH",
+        assetID: assets.Ethereum
+    },
+    "Waves": {
+        course: 'waves-rub',
+        name: "Waves",
+        ticker: "WAVES",
+        assetID: assets.Waves
+    },
+    "ZCash": {
+        course: 'zec-rub',
+        name: "ZCash",
+        ticker: "ZEC",
+        assetID: assets.ZCash
+    },
+    "Litecoin": {
+        course: 'ltc-rub',
+        name: "Litecoin",
+        ticker: "LTC",
+        assetID: assets.Litecoin
+    },
+    "US Dollar": {
+        course: 'usd-rub',
+        name: "US Dollar",
+        name1: 'US_Dollar',
+        ticker: "USD",
+        assetID: assets.US_Dollar
+    },
+    "Euro": {
+        course: 'eur-rub',
+        name: "Euro",
+        ticker: "EUR",
+        assetID: assets.Euro
+    },
+};
+
+var exchange = {
+    'Waves': {
+        'Bitcoin': {
+            'type': 'sell',
+            'assetID1': assets.Waves,
+            'assetID2': assets.Bitcoin
+        },
+        'Ethereum': {
+            'type': 'buy',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.Waves
+        },
+        'ZCash': {
+            'type': 'buy',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Waves
+        },
+        'Litecoin': {
+            'type': 'buy',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Waves
+        },
+        'US Dollar': {
+            'type': 'sell',
+            'assetID1': assets.Waves,
+            'assetID2': assets.US_Dollar
+        },
+        'Euro': {
+            'type': 'sell',
+            'assetID1': assets.Waves,
+            'assetID2': assets.Euro
+        }
+    },
+    'Bitcoin': {
+        'Waves': {
+            'type': 'buy',
+            'assetID1': assets.Waves,
+            'assetID2': assets.Bitcoin
+        },
+        'Ethereum': {
+            'type': 'buy',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.Bitcoin
+        },
+        'ZCash': {
+            'type': 'buy',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Bitcoin
+        },
+        'Litecoin': {
+            'type': 'buy',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Bitcoin
+        },
+        'US Dollar': {
+            'type': 'sell',
+            'assetID1': assets.Bitcoin,
+            'assetID2': assets.US_Dollar
+        },
+        'Euro': {
+            'type': 'sell',
+            'assetID1': assets.Bitcoin,
+            'assetID2': assets.Euro
+        }
+    },
+    'Ethereum': {
+        'Bitcoin': {
+            'type': 'sell',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.Bitcoin
+        },
+        'Waves': {
+            'type': 'sell',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.Waves
+        },
+        'ZCash': {
+            'type': 'buy',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Ethereum
+        },
+        'Litecoin': {
+            'type': 'buy',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Ethereum
+        },
+        'US Dollar': {
+            'type': 'sell',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.US_Dollar
+        },
+        'Euro': {
+            'type': 'sell',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.Euro
+        }
+    },
+    "ZCash": {
+        'Bitcoin': {
+            'type': 'sell',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Bitcoin
+        },
+        'Waves': {
+            'type': 'sell',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Waves
+        },
+        'Ethereum': {
+            'type': 'sell',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Ethereum
+        },
+        'Litecoin': {
+            'type': 'buy',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.ZCash
+        },
+        'US Dollar': {
+            'type': 'sell',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.US_Dollar
+        },
+        'Euro': {
+            'type': 'sell',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Euro
+        }
+    },
+    "Litecoin": {
+        'Bitcoin': {
+            'type': 'sell',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Bitcoin
+        },
+        'Waves': {
+            'type': 'sell',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Waves
+        },
+        'Ethereum': {
+            'type': 'sell',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Ethereum
+        },
+        'ZCash': {
+            'type': 'sell',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.ZCash
+        },
+        'US Dollar': {
+            'type': 'sell',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.US_Dollar
+        },
+        'Euro': {
+            'type': 'sell',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Euro
+        }
+    },
+    "US Dollar": {
+        'Bitcoin': {
+            'type': 'buy',
+            'assetID1': assets.Bitcoin,
+            'assetID2': assets.US_Dollar
+        },
+        'Waves': {
+            'type': 'buy',
+            'assetID1': assets.Waves,
+            'assetID2': assets.US_Dollar
+        },
+        'Ethereum': {
+            'type': 'buy',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.US_Dollar
+        },
+        'ZCash': {
+            'type': 'buy',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.US_Dollar
+        },
+        'Litecoin': {
+            'type': 'buy',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.US_Dollar
+        },
+        'Euro': {
+            'type': 'buy',
+            'assetID1': assets.Euro,
+            'assetID2': assets.US_Dollar
+        }
+    },
+    "Euro": {
+        'Bitcoin': {
+            'type': 'buy',
+            'assetID1': assets.Bitcoin,
+            'assetID2': assets.Euro
+        },
+        'Waves': {
+            'type': 'buy',
+            'assetID1': assets.Waves,
+            'assetID2': assets.Euro
+        },
+        'Ethereum': {
+            'type': 'buy',
+            'assetID1': assets.Ethereum,
+            'assetID2': assets.Euro
+        },
+        'ZCash': {
+            'type': 'buy',
+            'assetID1': assets.ZCash,
+            'assetID2': assets.Euro
+        },
+        'Litecoin': {
+            'type': 'buy',
+            'assetID1': assets.Litecoin,
+            'assetID2': assets.Euro
+        },
+        'US Dollar': {
+            'type': 'sell',
+            'assetID1': assets.Euro,
+            'assetID2': assets.US_Dollar
+        }
+    }
+}
+
 /* ----CONFIG BLOCK END---- */
 
 
@@ -155,7 +430,7 @@ const Transactions = {
             senderPublicKey: sender.keyPair.publicKey,
             assetId: assetId,
             amount: amount,
-            feeAssetId: 'WAVES',
+            feeAssetId: assets.Waves,
             fee: 100000,
             attachment: '',
             timestamp: Date.now()
@@ -195,7 +470,7 @@ const Transactions = {
             senderPublicKey: sender.keyPair.publicKey,
             assetId: assetId,
             amount: amount,
-            feeAssetId: 'WAVES',
+            feeAssetId: assets.Waves,
             fee: 100000,
             attachment: '',
             timestamp: Date.now()
@@ -209,6 +484,126 @@ const Transactions = {
 
 
 /* ----DEX BLOCK START---- */
+const DEX = {
+    /**
+     * Allows to create order with min price in buy and max price in sell
+     * @param currencyToSell Currency that will be sell
+     * @param currencyToBuy Currency that will be buy
+     * @param amount Amount of currency that will be buy
+     * @param expiration After that time created and not used order will be closed
+     * @param seedPhrase A set of 15 words
+     * @returns {Promise<void>} Accepted order (or not accepted) object
+     */
+    createCustomOrder: async (currencyToSell, currencyToBuy, amount, expiration, seedPhrase) => {
+        const sender = Account.getSeedFromPhrase(seedPhrase);
 
+        const orderBook = await DEX.getOrderBook(currencyToSell, currencyToBuy);
+
+        const type = exchange[currencyToSell][currencyToBuy].type;
+
+        let dependency;
+        if (type === 'sell') {
+            dependency = 'bids';
+        } else {
+            dependency = 'asks';
+        }
+
+        let priceIndex;
+        for (let i in orderBook[dependency]) {
+            const price = orderBook[dependency][i].price;
+            let _amount = amount;
+            if (type === 'sell') {
+                _amount = (amount / price * Math.pow(10, 8)).toFixed(0);
+            }
+            if (orderBook[dependency][i].amount >= _amount) {
+                priceIndex = i;
+                amount = _amount;
+                break;
+            }
+        }
+
+        try {
+            const price = orderBook[dependency][priceIndex].price;
+            const TX_OBJECT = await DEX.createTXObject(
+                orderBook.pair.amountAsset,
+                orderBook.pair.priceAsset,
+                type,
+                amount,
+                price,
+                expiration,
+                sender
+            );
+
+            return await Waves.API.Matcher.createOrder(TX_OBJECT, sender.keyPair);
+        } catch (e) {
+            throw e;
+        }
+    },
+    /**
+     * Allows to create tx object for exchange cryptocurrencies
+     * @param amountAssetId ID of asset that will be in amount field
+     * @param priceAssetId ID of asset that will be in price field
+     * @param orderType Type of order (buy or sell)
+     * @param amount Amount of currency that will be sell or buy
+     * @param price Exchange rate
+     * @param expiration After that time created and not used order will be closed
+     * @param sender Seed Object
+     * @returns {Promise<{senderPublicKey: *, matcherPublicKey, amountAsset: *, priceAsset: *, orderType: *, amount: *, price: *, timestamp: number, expiration: number, matcherFee: number}>} tx object
+     */
+    createTXObject: async (amountAssetId, priceAssetId, orderType, amount, price, expiration, sender) => {
+        const matcherPublicKey = await Waves.API.Matcher.getMatcherKey();
+
+        const transferData = {
+            senderPublicKey: sender.keyPair.publicKey,
+            matcherPublicKey: matcherPublicKey,
+            amountAsset: amountAssetId,
+            priceAsset: priceAssetId,
+            orderType: orderType,
+            amount: amount,
+            price: price,
+            timestamp: Number(Date.now()),
+            expiration: Number(Date.now() + expiration),
+            matcherFee: 300000
+        };
+
+        return transferData;
+    },
+    /**
+     * Allows to get asset pair with bids and asks
+     * @param currencyToSell Currency that will be sell
+     * @param currencyToBuy Currency that will be buy
+     * @returns {Promise<any>} Order book object
+     */
+    getOrderBook: async (currencyToSell, currencyToBuy) => {
+        const sell = currency[currencyToSell].assetID;
+        const buy = currency[currencyToBuy].assetID;
+
+        const response = await $.get({
+            url: `https://matcher.wavesplatform.com/matcher/orderbook/${sell}/${buy}`,
+            type: 'GET',
+            dataType: 'text'
+        });
+
+        return JSON.parse(response);
+    }
+}
 /* ----DEX BLOCK END---- */
+
+/* ----COURSE BLOCK START---- */
+const Course = {
+    /**
+     * Allows to get course
+     * @param currency Currency, relative to which the course will be taken
+     * @returns {Promise<*>} Object with exchange rates
+     */
+    getCourse: async (currency) => {
+        const response = await $.get({
+            url: `https://min-api.cryptocompare.com/data/price?fsym=${currency}&tsyms=WAVES,BTC,ETH,ZEC,LTC,USD,EUR,RUB`,
+            type: 'GET',
+        });
+
+        return response;
+    }
+}
+/* ----COURSE BLOCK END---- */
 
