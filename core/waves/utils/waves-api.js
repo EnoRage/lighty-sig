@@ -74232,6 +74232,8 @@
             exports.getOrders = orderbooks_1.default.getOrders;
             exports.getAllOrders = orderbooks_1.default.getAllOrders;
             exports.createOrder = orderbooks_1.default.createOrder;
+            exports.signTransaction = orderbooks_1.default.signTransaction;
+            exports.send = orderbooks_1.default.send;
             exports.cancelOrder = orderbooks_1.default.cancelOrder;
             exports.deleteOrder = orderbooks_1.default.deleteOrder;
 
@@ -74243,7 +74245,7 @@
             var fetch = request_1.createFetchWrapper(1 /* MATCHER */, 0 /* V1 */, request_1.processJSON);
             exports.default = {
                 getMatcherKey: function () {
-                    return fetch('/matcher');
+                    return fetch('/');
                 }
             };
 
@@ -74336,8 +74338,15 @@
                     });
                 },
                 createOrder: request_1.wrapTxRequest(waves_signature_generator_1.CREATE_ORDER_SIGNATURE, preCreateOrderAsync, postCreateOrder, function (postParams) {
-                    return fetch('/matcher/orderbook', postParams);
+                    return fetch('/orderbook', postParams);
                 }),
+                signTransaction: request_1.wrapTxRequest(waves_signature_generator_1.CREATE_ORDER_SIGNATURE, preCreateOrderAsync, postCreateOrder, function (postParams) {
+                    console.log(postParams)
+                    return postParams;
+                }),
+                send: (postParams) => {
+                    return fetch('/orderbook', postParams);
+                },
                 cancelOrder: generateCancelLikeRequest('cancel'),
                 deleteOrder: generateCancelLikeRequest('delete')
             };
@@ -75303,7 +75312,7 @@
             exports.DEFAULT_MAINNET_CONFIG = __assign({}, exports.DEFAULT_BASIC_CONFIG, {
                 networkByte: exports.MAINNET_BYTE,
                 nodeAddress: 'https://nodes.wavesplatform.com',
-                matcherAddress: 'https://matcher.wavesplatform.com'
+                matcherAddress: 'https://matcher.wavesplatform.com/matcher'
             });
             exports.DEFAULT_TESTNET_CONFIG = __assign({}, exports.DEFAULT_BASIC_CONFIG, {
                 networkByte: exports.TESTNET_BYTE,
