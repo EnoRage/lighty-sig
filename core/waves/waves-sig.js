@@ -2,9 +2,26 @@
 
 const Waves = WavesAPI.create(WavesAPI.MAINNET_CONFIG);
 
+/**
+ * Convert Number to BigNumber
+ * @param x Some number
+ * @returns {*} BigNumber
+ */
 const tbn = (x) => new BigNumber(x);
-const tw = (x) => BigNumber.isBigNumber(x) ? x.times(1e8).toFixed(0) : this.Waves.utils.tbn(x).times(1e8).toFixed(0);
-const fw = (x) => BigNumber.isBigNumber(x) ? x.times(1e-8).toNumber() : this.Waves.utils.tbn(x).times(1e-8).toNumber();
+
+/**
+ * Convert Number (or BN) to this * 10^8
+ * @param x Some number
+ * @returns {*} Number * 10^8
+ */
+const tw = (x) => BigNumber.isBigNumber(x) ? x.times(1e8).toFixed(0) : tbn(x).times(1e8).toFixed(0);
+
+/**
+ * Convert from minimal Waves unit
+ * @param x Some number
+ * @returns {*} Converted number
+ */
+const fw = (x) => BigNumber.isBigNumber(x) ? x.times(1e-8).toNumber() : tbn(x).times(1e-8).toNumber();
 
 const assets = {
     'Waves': 'WAVES',
