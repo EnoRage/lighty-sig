@@ -317,7 +317,7 @@ class LightySig {
             balance: Balance,
             course: Course,
             transactions: Transactions,
-            dex: DEX
+            exchange: Exchange
         }
     }
 
@@ -503,8 +503,8 @@ const Transactions = {
 /* ----TX TRANSFER BLOCK END---- */
 
 
-/* ----DEX BLOCK START---- */
-const DEX = {
+/* ----Exchange BLOCK START---- */
+const Exchange = {
     /**
      * Allows to create order with min price in buy and max price in sell
      * @param currencyToSell Currency that will be sell
@@ -517,7 +517,7 @@ const DEX = {
     createCustomOrder: async (currencyToSell, currencyToBuy, amount, expiration, seedPhrase) => {
         const sender = Account.getSeedFromPhrase(seedPhrase);
 
-        const orderBook = await DEX.getOrderBook(currencyToSell, currencyToBuy);
+        const orderBook = await Exchange.getOrderBook(currencyToSell, currencyToBuy);
 
         const type = exchange[currencyToSell][currencyToBuy].type;
 
@@ -543,7 +543,7 @@ const DEX = {
 
         try {
             const price = orderBook[dependency][priceIndex].price;
-            const TX_OBJECT = await DEX.createTXObject(
+            const TX_OBJECT = await Exchange.createTXObject(
                 orderBook.pair.amountAsset,
                 orderBook.pair.priceAsset,
                 type,
@@ -606,7 +606,7 @@ const DEX = {
         return JSON.parse(response);
     }
 }
-/* ----DEX BLOCK END---- */
+/* ----Exchange BLOCK END---- */
 
 /* ----COURSE BLOCK START---- */
 const Course = {
