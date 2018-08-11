@@ -594,6 +594,15 @@ const Exchange = {
 
         return transferData;
     },
+    /**
+     * Allows to sign exchange transaction
+     * @param currencyToSell Currency that will be sell
+     * @param currencyToBuy Currency that will be buy
+     * @param amount Amount of currency that will be buy
+     * @param expiration After that time created and not used order will be closed
+     * @param seedPhrase A set of 15 words
+     * @returns {Promise<any>} Sign transaction object
+     */
     signTransaction: async (currencyToSell, currencyToBuy, amount, expiration, seedPhrase) => {
         const sender = Account.getSeedFromPhrase(seedPhrase);
 
@@ -613,7 +622,6 @@ const Exchange = {
             let signedTransaction = await Waves.API.Matcher.signTransaction(TX_OBJECT, sender.keyPair);
 
             let data = JSON.parse(signedTransaction.body);
-            // data.type = Waves.constants.EXCHANGE_TX;
 
             return data;
         } catch (e) {
