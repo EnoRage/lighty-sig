@@ -1,18 +1,12 @@
+'use strict';
+
+const Waves = WavesAPI.create(WavesAPI.MAINNET_CONFIG);
+
 const tbn = (x) => new BigNumber(x);
-const tw = (x) => BigNumber.isBigNumber(x) ? x.times(1e8).toFixed(0) : tbn(x).times(1e8).toFixed(0);
-const fw = (x) => BigNumber.isBigNumber(x) ? x.times(1e-8).toFixed(0) : tbn(x).times(1e-8).toFixed(0);
+const tw = (x) => BigNumber.isBigNumber(x) ? x.times(1e8).toFixed(0) : this.Waves.utils.tbn(x).times(1e8).toFixed(0);
+const fw = (x) => BigNumber.isBigNumber(x) ? x.times(1e-8).toNumber() : this.Waves.utils.tbn(x).times(1e-8).toNumber();
 
-/* ----CONFIG BLOCK START---- */
-const CURRENT_NETWORK = WavesAPI.MAINNET_CONFIG;
-
-const TESTNET_CONFIG = {
-    networkByte: 84,
-    nodeAddress: 'https://testnode3.wavesnodes.com',
-    matcherAddress: 'https://testnode3.wavesnodes.com/matcher',
-    minimumSeedLength: 50
-};
-
-var assets = {
+const assets = {
     'Waves': 'WAVES',
     'Bitcoin': '8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS',
     'BitcoinCash': 'zMFqXuoyrn5w17PFurTqxB7GsS71fp9dfk6XFwxbPCy',
@@ -23,288 +17,294 @@ var assets = {
     'Monero': '5WvPKSJXzVE2orvbkJ8wsQmmQKqTv9sGBPksV4adViw3',
     'US_Dollar': 'Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck',
     'Euro': 'Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU'
-}
+};
 
-var currency = {
+const currency = {
     "Bitcoin": {
         course: 'btc-rub',
-        name: "Bitcoin",
-        ticker: "BTC",
-        assetID: assets.Bitcoin
+            name: "Bitcoin",
+            ticker: "BTC",
+            assetID: assets.Bitcoin
     },
     "Ethereum": {
         course: 'eth-rub',
-        name: "Ethereum",
-        ticker: "ETH",
-        assetID: assets.Ethereum
+            name: "Ethereum",
+            ticker: "ETH",
+            assetID: assets.Ethereum
     },
     "Waves": {
         course: 'waves-rub',
-        name: "Waves",
-        ticker: "WAVES",
-        assetID: assets.Waves
+            name: "Waves",
+            ticker: "WAVES",
+            assetID: assets.Waves
     },
     "ZCash": {
         course: 'zec-rub',
-        name: "ZCash",
-        ticker: "ZEC",
-        assetID: assets.ZCash
+            name: "ZCash",
+            ticker: "ZEC",
+            assetID: assets.ZCash
     },
     "Litecoin": {
         course: 'ltc-rub',
-        name: "Litecoin",
-        ticker: "LTC",
-        assetID: assets.Litecoin
+            name: "Litecoin",
+            ticker: "LTC",
+            assetID: assets.Litecoin
     },
     "US Dollar": {
         course: 'usd-rub',
-        name: "US Dollar",
-        name1: 'US_Dollar',
-        ticker: "USD",
-        assetID: assets.US_Dollar
+            name: "US Dollar",
+            name1: 'US_Dollar',
+            ticker: "USD",
+            assetID: assets.US_Dollar
     },
     "Euro": {
         course: 'eur-rub',
-        name: "Euro",
-        ticker: "EUR",
-        assetID: assets.Euro
+            name: "Euro",
+            ticker: "EUR",
+            assetID: assets.Euro
     },
 };
 
-var exchange = {
+const exchange = {
     'Waves': {
         'Bitcoin': {
             'type': 'sell',
-            'assetID1': assets.Waves,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.Waves,
+                'assetID2': assets.Bitcoin
         },
         'Ethereum': {
             'type': 'buy',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.Waves
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.Waves
         },
         'ZCash': {
             'type': 'buy',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Waves
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Waves
         },
         'Litecoin': {
             'type': 'buy',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Waves
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Waves
         },
         'US Dollar': {
             'type': 'sell',
-            'assetID1': assets.Waves,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Waves,
+                'assetID2': assets.US_Dollar
         },
         'Euro': {
             'type': 'sell',
-            'assetID1': assets.Waves,
-            'assetID2': assets.Euro
+                'assetID1': assets.Waves,
+                'assetID2': assets.Euro
         }
     },
     'Bitcoin': {
         'Waves': {
             'type': 'buy',
-            'assetID1': assets.Waves,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.Waves,
+                'assetID2': assets.Bitcoin
         },
         'Ethereum': {
             'type': 'buy',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.Bitcoin
         },
         'ZCash': {
             'type': 'buy',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Bitcoin
         },
         'Litecoin': {
             'type': 'buy',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Bitcoin
         },
         'US Dollar': {
             'type': 'sell',
-            'assetID1': assets.Bitcoin,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Bitcoin,
+                'assetID2': assets.US_Dollar
         },
         'Euro': {
             'type': 'sell',
-            'assetID1': assets.Bitcoin,
-            'assetID2': assets.Euro
+                'assetID1': assets.Bitcoin,
+                'assetID2': assets.Euro
         }
     },
     'Ethereum': {
         'Bitcoin': {
             'type': 'sell',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.Bitcoin
         },
         'Waves': {
             'type': 'sell',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.Waves
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.Waves
         },
         'ZCash': {
             'type': 'buy',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Ethereum
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Ethereum
         },
         'Litecoin': {
             'type': 'buy',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Ethereum
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Ethereum
         },
         'US Dollar': {
             'type': 'sell',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.US_Dollar
         },
         'Euro': {
             'type': 'sell',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.Euro
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.Euro
         }
     },
     "ZCash": {
         'Bitcoin': {
             'type': 'sell',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Bitcoin
         },
         'Waves': {
             'type': 'sell',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Waves
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Waves
         },
         'Ethereum': {
             'type': 'sell',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Ethereum
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Ethereum
         },
         'Litecoin': {
             'type': 'buy',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.ZCash
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.ZCash
         },
         'US Dollar': {
             'type': 'sell',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.ZCash,
+                'assetID2': assets.US_Dollar
         },
         'Euro': {
             'type': 'sell',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Euro
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Euro
         }
     },
     "Litecoin": {
         'Bitcoin': {
             'type': 'sell',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Bitcoin
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Bitcoin
         },
         'Waves': {
             'type': 'sell',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Waves
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Waves
         },
         'Ethereum': {
             'type': 'sell',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Ethereum
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Ethereum
         },
         'ZCash': {
             'type': 'sell',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.ZCash
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.ZCash
         },
         'US Dollar': {
             'type': 'sell',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.US_Dollar
         },
         'Euro': {
             'type': 'sell',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Euro
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Euro
         }
     },
     "US Dollar": {
         'Bitcoin': {
             'type': 'buy',
-            'assetID1': assets.Bitcoin,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Bitcoin,
+                'assetID2': assets.US_Dollar
         },
         'Waves': {
             'type': 'buy',
-            'assetID1': assets.Waves,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Waves,
+                'assetID2': assets.US_Dollar
         },
         'Ethereum': {
             'type': 'buy',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.US_Dollar
         },
         'ZCash': {
             'type': 'buy',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.ZCash,
+                'assetID2': assets.US_Dollar
         },
         'Litecoin': {
             'type': 'buy',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.US_Dollar
         },
         'Euro': {
             'type': 'buy',
-            'assetID1': assets.Euro,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Euro,
+                'assetID2': assets.US_Dollar
         }
     },
     "Euro": {
         'Bitcoin': {
             'type': 'buy',
-            'assetID1': assets.Bitcoin,
-            'assetID2': assets.Euro
+                'assetID1': assets.Bitcoin,
+                'assetID2': assets.Euro
         },
         'Waves': {
             'type': 'buy',
-            'assetID1': assets.Waves,
-            'assetID2': assets.Euro
+                'assetID1': assets.Waves,
+                'assetID2': assets.Euro
         },
         'Ethereum': {
             'type': 'buy',
-            'assetID1': assets.Ethereum,
-            'assetID2': assets.Euro
+                'assetID1': assets.Ethereum,
+                'assetID2': assets.Euro
         },
         'ZCash': {
             'type': 'buy',
-            'assetID1': assets.ZCash,
-            'assetID2': assets.Euro
+                'assetID1': assets.ZCash,
+                'assetID2': assets.Euro
         },
         'Litecoin': {
             'type': 'buy',
-            'assetID1': assets.Litecoin,
-            'assetID2': assets.Euro
+                'assetID1': assets.Litecoin,
+                'assetID2': assets.Euro
         },
         'US Dollar': {
             'type': 'sell',
-            'assetID1': assets.Euro,
-            'assetID2': assets.US_Dollar
+                'assetID1': assets.Euro,
+                'assetID2': assets.US_Dollar
         }
     }
+};
+
+class LightySig {
+
+    constructor() {
+        this.Waves = {
+            account: Account,
+            balance: Balance,
+            course: Course,
+            transactions: Transactions,
+            dex: DEX
+        }
+    }
+
 }
-/* ----CONFIG BLOCK END---- */
-
-
-/* ----INITIALIZE BLOCK START---- */
-const Waves = WavesAPI.create(CURRENT_NETWORK);
-// Waves.config.set(TESTNET_CONFIG);
-/* ----INITIALIZE BLOCK END---- */
-
 
 /* ----KEY PAIR BLOCK START---- */
 const Account = {
@@ -433,7 +433,7 @@ const Transactions = {
             senderPublicKey: sender.keyPair.publicKey,
             assetId: assetId,
             amount: amount,
-            feeAssetId: assets.Waves,
+            feeassetID: assets.Waves,
             fee: 100000,
             attachment: '',
             timestamp: Date.now()
@@ -473,7 +473,7 @@ const Transactions = {
             senderPublicKey: sender.keyPair.publicKey,
             assetId: assetId,
             amount: amount,
-            feeAssetId: assets.Waves,
+            feeassetID: assets.Waves,
             fee: 100000,
             attachment: '',
             timestamp: Date.now()
@@ -621,4 +621,3 @@ const Course = {
     }
 }
 /* ----COURSE BLOCK END---- */
-
