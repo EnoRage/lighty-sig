@@ -313,7 +313,7 @@ class LightySig {
 
     constructor() {
         this.Waves = _Waves;
-        this.Ethereum = {}
+        this.Ethereum = _Ethereum;
         this.utils = {
             course: Course
         }
@@ -663,6 +663,29 @@ const _Waves = {
                 throw e;
             }
         },
+    }
+};
+
+const _Ethereum = {
+    account: {
+        create: () => {
+            let params = {
+                keyBytes: 32,
+                ivBytes: 16
+            };
+            let dk = keythereum.create(params);
+
+            return "0x" + dk.privateKey.reduce((memo, i) => {
+                return memo + ('0' + i.toString(16)).slice(-2);
+            }, '');
+        },
+        getAddress: (privateKey) => {
+            let _privateKey = "";
+            for(let i = 2; i < privateKey.length; i++) {
+                _privateKey += privateKey[i];
+            }
+            return keythereum.privateKeyToAddress(_privateKey);
+        }
     }
 };
 
