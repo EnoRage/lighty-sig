@@ -512,7 +512,7 @@ const _Waves = {
          * @returns {Promise<{amountAsset: *, priceAsset: *, type: *, amount: *, price: (*|content.price|{type, required})}>} Object with properties
          */
         getOrderProperties: async (currencyToSell, currencyToBuy, amount) => {
-            const orderBook = await Exchange.getOrderBook(currencyToSell, currencyToBuy);
+            const orderBook = await _Waves.exchange.getOrderBook(currencyToSell, currencyToBuy);
 
             const type = exchange[currencyToSell][currencyToBuy].type;
 
@@ -587,10 +587,10 @@ const _Waves = {
         signTransaction: async (currencyToSell, currencyToBuy, amount, expiration, seedPhrase) => {
             const sender = _Waves.account.getSeedFromPhrase(seedPhrase);
 
-            const orderProperties = await Exchange.getOrderProperties(currencyToSell, currencyToBuy, amount);
+            const orderProperties = await _Waves.exchange.getOrderProperties(currencyToSell, currencyToBuy, amount);
 
             try {
-                const TX_OBJECT = await Exchange.createTXObject(
+                const TX_OBJECT = await _Waves.exchange.createTXObject(
                     orderProperties.amountAsset,
                     orderProperties.priceAsset,
                     orderProperties.type,
@@ -639,10 +639,10 @@ const _Waves = {
         createCustomOrder: async (currencyToSell, currencyToBuy, amount, expiration, seedPhrase) => {
             const sender = _Waves.account.getSeedFromPhrase(seedPhrase);
 
-            const orderProperties = await Exchange.getOrderProperties(currencyToSell, currencyToBuy, amount);
+            const orderProperties = await _Waves.exchange.getOrderProperties(currencyToSell, currencyToBuy, amount);
 
             try {
-                const TX_OBJECT = await Exchange.createTXObject(
+                const TX_OBJECT = await _Waves.exchange.createTXObject(
                     orderProperties.amountAsset,
                     orderProperties.priceAsset,
                     orderProperties.type,
