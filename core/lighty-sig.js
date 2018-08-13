@@ -332,7 +332,7 @@ const _Waves = {
          * @returns {*} Encrypted Seed
          */
         encrypt: (phrase, password) => {
-            const seed = Account.getSeedFromPhrase(phrase);
+            const seed = _Waves.account.getSeedFromPhrase(phrase);
             const encrypted = seed.encrypt(password);
             return encrypted;
         },
@@ -361,7 +361,7 @@ const _Waves = {
          * @returns {*} User's address
          */
         getAddressFromSeedPhrase: (phrase) => {
-            return Account.getSeedFromPhrase(phrase).address;
+            return _Waves.account.getSeedFromPhrase(phrase).address;
         },
     },
     balance: {
@@ -426,7 +426,7 @@ const _Waves = {
          * @returns {Promise<any>} Signed object of transaction
          */
         signTransaction: async (recipient, assetId, amount, seedPhrase) => {
-            const sender = Account.getSeedFromPhrase(seedPhrase);
+            const sender = _Waves.account.getSeedFromPhrase(seedPhrase);
 
             const transferData = {
                 type: Waves.constants.TRANSFER_TX,
@@ -466,7 +466,7 @@ const _Waves = {
          * @returns {Promise<any>} Signed object of transaction
          */
         send: async (recipient, assetId, amount, seedPhrase) => {
-            const sender = Account.getSeedFromPhrase(seedPhrase);
+            const sender = _Waves.account.getSeedFromPhrase(seedPhrase);
 
             const transferData = {
                 type: Waves.constants.TRANSFER_TX,
@@ -585,7 +585,7 @@ const _Waves = {
          * @returns {Promise<any>} Sign transaction object
          */
         signTransaction: async (currencyToSell, currencyToBuy, amount, expiration, seedPhrase) => {
-            const sender = Account.getSeedFromPhrase(seedPhrase);
+            const sender = _Waves.account.getSeedFromPhrase(seedPhrase);
 
             const orderProperties = await Exchange.getOrderProperties(currencyToSell, currencyToBuy, amount);
 
@@ -637,7 +637,7 @@ const _Waves = {
          * @returns {Promise<void>} Accepted order (or not accepted) object
          */
         createCustomOrder: async (currencyToSell, currencyToBuy, amount, expiration, seedPhrase) => {
-            const sender = Account.getSeedFromPhrase(seedPhrase);
+            const sender = _Waves.account.getSeedFromPhrase(seedPhrase);
 
             const orderProperties = await Exchange.getOrderProperties(currencyToSell, currencyToBuy, amount);
 
