@@ -1,6 +1,14 @@
 'use strict';
 
 const Waves = WavesAPI.create(WavesAPI.MAINNET_CONFIG);
+if (typeof web3 !== "undefined") {
+    // Use Mist/MetaMask's provider
+    window.web3 = new Web3(web3.currentProvider);
+} else {
+    window.web3 = new Web3(
+        new Web3.providers.HttpProvider("http://localhost:8545")
+    );
+}
 
 /**
  * Convert Number to BigNumber
@@ -8,20 +16,6 @@ const Waves = WavesAPI.create(WavesAPI.MAINNET_CONFIG);
  * @returns {*} BigNumber
  */
 const tbn = (x) => new BigNumber(x);
-
-/**
- * Convert Number (or BN) to this * 10^8
- * @param x Some number
- * @returns {*} Number * 10^8
- */
-const twWaves = (x) => BigNumber.isBigNumber(x) ? x.times(1e8).toFixed(0) : tbn(x).times(1e8).toFixed(0);
-
-/**
- * Convert from minimal Waves unit
- * @param x Some number
- * @returns {*} Converted number
- */
-const fwWaves = (x) => BigNumber.isBigNumber(x) ? x.times(1e-8).toNumber() : tbn(x).times(1e-8).toNumber();
 
 const assets = {
     'Waves': 'WAVES',
@@ -534,7 +528,7 @@ const _Waves = {
                 const price = orderBook[dependency][i].price;
                 let _amount = amount;
                 if (type === 'sell')
-                    _amount = twWaves(tbn(amount).div(price)).toNumber();
+                    _amount = _Waves.utils.tw(tbn(amount).div(price)).toNumber();
                 if (orderBook[dependency][i].amount >= _amount) {
                     priceIndex = i;
                     amount = _amount;
@@ -663,11 +657,37 @@ const _Waves = {
                 throw e;
             }
         },
+    },
+    utils: {
+        /**
+         * Convert Number (or BN) to this * 10^8
+         * @param x Some number
+         * @returns {*} Number * 10^8
+         */
+        tw: (x) => BigNumber.isBigNumber(x) ? x.times(1e8).toFixed(0) : tbn(x).times(1e8).toFixed(0),
+
+        /**
+         * Convert from minimal Waves unit
+         * @param x Some number
+         * @returns {*} Converted number
+         */
+        fw: (x) => BigNumber.isBigNumber(x) ? x.times(1e-8).toNumber() : tbn(x).times(1e-8).toNumber()
     }
 };
 
 const _Ethereum = {
+    /**
+     * Allows to change RPC url. Default: http://localhost:8545/
+     * @param url New RPC URL
+     */
+    setRPCurl: (url) => {
+        window.web3 = new Web3(new Web3.providers.HttpProvider(url))
+    },
     account: {
+        /**
+         * Allows to create
+         * @returns {string}
+         */
         create: () => {
             let params = {
                 keyBytes: 32,
@@ -681,11 +701,97 @@ const _Ethereum = {
         },
         getAddress: (privateKey) => {
             let _privateKey = "";
-            for(let i = 2; i < privateKey.length; i++) {
+            for (let i = 2; i < privateKey.length; i++) {
                 _privateKey += privateKey[i];
             }
             return keythereum.privateKeyToAddress(_privateKey);
         }
+    },
+    balance: {
+        getBalance: async (address) => {
+            return await web3.eth.getBalance(address);
+        }
+    },
+    transactions: {
+        signTransaction: async (receivers, values, privateKey, datas) => {
+            if (typeof datas === 'undefined') {
+                datas = [];
+                datas[receivers.length - 1] = null;
+            }
+
+            if (receivers.length != values.length || values.length != datas.length)
+                return new Error(`You have ${receivers.length} receivers, ${values.length} values and ${datas.length} datas. It should be equal.`);
+
+            const address = _Ethereum.account.getAddress(privateKey);
+            let nonce = await web3.eth.getTransactionCount(address);
+
+            const signedTX = [];
+            for (let i in receivers) {
+                const txParam = {
+                    nonce: nonce,
+                    to: receivers[i],
+                    value: values[i],
+                    from: address,
+                    data: datas[i],
+                    gasPrice: 0x3b9bca00,
+                    gas: 210000
+                };
+
+                const tx = new ethereumjs.Tx(txParam);
+                const privateKeyBuffer = ethereumjs.Buffer.Buffer.from(privateKey.substring(2), 'hex');
+                tx.sign(privateKeyBuffer);
+                const serializedTx = tx.serialize();
+                signedTX.push('0x' + serializedTx.toString('hex'));
+                nonce++;
+            }
+
+            return signedTX;
+        },
+        sendSigned: async (rawTransations) => {
+            const results = [];
+
+            for (let i in rawTransations) {
+                await web3.eth.sendSignedTransaction(rawTransations[i], (err, transactionHash) => {
+                    if (err) {
+                        results.push(err);
+                        return;
+                    }
+
+                    results.push(transactionHash);
+                });
+            }
+
+            return results;
+        },
+    },
+    contract: {
+        getInstance: (CONTRACT_ABI, CONTRACT_ADDRESS) => {
+            const instance = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+            return instance;
+        },
+        getCallData: (instance, methodName, ...parameters) => {
+            const data = instance.methods[methodName](...parameters).encodeABI();
+            return data;
+        },
+        get: async (instance, methodName, addressFrom, ...parameters) => {
+                let result = await instance.methods[methodName](...parameters).call({from: addressFrom});
+                return result;
+        }
+    },
+    utils: {
+        /**
+         * Convert Number (or BN) to this * 10^18
+         * @param x Some number
+         * @returns {*} Number * 10^18
+         */
+        tw: (x) => BigNumber.isBigNumber(x) ? x.times(1e18).toFixed(0) : tbn(x).times(1e18).toFixed(0),
+
+        /**
+         * Convert from minimal Ethereum unit
+         * @param x Some number
+         * @returns {*} Converted number
+         */
+        fw: (x) => BigNumber.isBigNumber(x) ? x.times(1e-18).toNumber() : tbn(x).times(1e-18).toNumber()
     }
 };
 
