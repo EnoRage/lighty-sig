@@ -685,8 +685,8 @@ const _Ethereum = {
     },
     account: {
         /**
-         * Allows to create
-         * @returns {string}
+         * Allows to create new private key
+         * @returns {string} Private key
          */
         create: () => {
             let params = {
@@ -699,6 +699,11 @@ const _Ethereum = {
                 return memo + ('0' + i.toString(16)).slice(-2);
             }, '');
         },
+        /**
+         * Allows to get address from private key
+         * @param privateKey
+         * @returns {*} Address
+         */
         getAddress: (privateKey) => {
             let _privateKey = "";
             for (let i = 2; i < privateKey.length; i++) {
@@ -708,11 +713,25 @@ const _Ethereum = {
         }
     },
     balance: {
+        /**
+         * Allows to get address balance
+         * @param address Address
+         * @returns {Promise<*>} Balance (don't forget about 1e18)
+         */
         getBalance: async (address) => {
             return await web3.eth.getBalance(address);
         }
     },
     transactions: {
+        /**
+         * Allows to sign any Ethereum transaction.
+         * Using this function you can sign one or more tx in one time
+         * @param receivers Array of the receivers (can be contract address)
+         * @param values Array of values (if it non-payable func add 0 to array's elements)
+         * @param privateKey Sender's Private Key
+         * @param datas Hex string (func_sig + arg_1_as_bytes + arg_n_as_bytes)
+         * @returns {Promse<any>} Signed hex string
+         */
         signTransaction: async (receivers, values, privateKey, datas) => {
             if (typeof datas === 'undefined') {
                 datas = [];
@@ -747,6 +766,11 @@ const _Ethereum = {
 
             return signedTX;
         },
+        /**
+         * Allows to send signed transactions to blockchain
+         * @param rawTransations Signed hex string
+         * @returns {Promise<Array>} if success tx hash
+         */
         sendSigned: async (rawTransations) => {
             const results = [];
 
@@ -765,14 +789,35 @@ const _Ethereum = {
         },
     },
     contract: {
+        /**
+         * Creates a new contract instance with all its methods and events defined in its json interface object
+         * @param CONTRACT_ABI  application binary interface (look at remix)
+         * @param CONTRACT_ADDRESS Address of contract
+         * @returns {*} Contract instance
+         */
         getInstance: (CONTRACT_ABI, CONTRACT_ADDRESS) => {
             const instance = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
             return instance;
         },
+        /**
+         * Allows you to receive hexadecimal data for a function call using a manual signature and sending a transaction
+         * @param instance Contract instance
+         * @param methodName Name of the solidity function
+         * @param parameters Solidity function parameters
+         * @returns {*} hex string (func_sig + arg_1_as_bytes + arg_n_as_bytes)
+         */
         getCallData: (instance, methodName, ...parameters) => {
             const data = instance.methods[methodName](...parameters).encodeABI();
             return data;
         },
+        /**
+         * Allows to call get function on contract
+         * @param instance Contract instance
+         * @param methodName Name of the solidity function
+         * @param addressFrom Sender address
+         * @param parameters Solidity function parameters
+         * @returns {Promise<*>} Result
+         */
         get: async (instance, methodName, addressFrom, ...parameters) => {
                 let result = await instance.methods[methodName](...parameters).call({from: addressFrom});
                 return result;
